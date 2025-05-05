@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
     
-        // Password validation
-        const passwordInput = document.getElementById('password');
-        const validationItems = {
-            length: document.getElementById('length-validation'),
-            lowercase: document.getElementById('lowercase-validation'),
-            uppercase: document.getElementById('uppercase-validation'),
-            digit: document.getElementById('digit-validation'),
-            symbol: document.getElementById('symbol-validation')
-        };
+    // Password validation
+    const passwordInput = document.getElementById('password');
+    const validationItems = {
+        length: document.getElementById('length-validation'),
+        lowercase: document.getElementById('lowercase-validation'),
+        uppercase: document.getElementById('uppercase-validation'),
+        digit: document.getElementById('digit-validation'),
+        symbol: document.getElementById('symbol-validation')
+    };
 
       
       
