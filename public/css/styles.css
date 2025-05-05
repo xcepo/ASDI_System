@@ -1,5 +1,13 @@
 /* Custom CSS for Authentication System */
 
+:root {
+  --primary-color: #4361ee;
+  --error-color: #ef233c;
+  --success-color: #198754;
+  --dark-color: #303030;
+  --light-color: #f8f9fa;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f8f9fa;

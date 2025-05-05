@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
       redirectToDashboard();
     }
     
+
     // Password match validation
     confirmPasswordInput.addEventListener('input', function() {
       if (passwordInput.value !== confirmPasswordInput.value) {
