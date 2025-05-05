@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     const alertContainer = document.getElementById('alert-container');
-    const passwordInput = document.getElementById('password');
+    // const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirm-password');
     
     // Check if user is already logged in
@@ -9,6 +9,66 @@ document.addEventListener('DOMContentLoaded', function() {
       redirectToDashboard();
     }
     
+    
+    
+        // Password validation
+        const passwordInput = document.getElementById('password');
+        const validationItems = {
+            length: document.getElementById('length-validation'),
+            lowercase: document.getElementById('lowercase-validation'),
+            uppercase: document.getElementById('uppercase-validation'),
+            digit: document.getElementById('digit-validation'),
+            symbol: document.getElementById('symbol-validation')
+        };
+
+      
+      
+        passwordInput.addEventListener('input', validatePassword);
+        
+        function validatePassword() {
+            const password = passwordInput.value;
+            
+            // Check length
+            if (password.length >= 6) {
+                validationItems.length.classList.add('valid');
+            } else {
+                validationItems.length.classList.remove('valid');
+            }
+            
+            // Check lowercase
+            if (/[a-z]/.test(password)) {
+                validationItems.lowercase.classList.add('valid');
+            } else {
+                validationItems.lowercase.classList.remove('valid');
+            }
+            
+            // Check uppercase
+            if (/[A-Z]/.test(password)) {
+                validationItems.uppercase.classList.add('valid');
+            } else {
+                validationItems.uppercase.classList.remove('valid');
+            }
+            
+            // Check digit
+            if (/[0-9]/.test(password)) {
+                validationItems.digit.classList.add('valid');
+            } else {
+                validationItems.digit.classList.remove('valid');
+            }
+            
+            // Check symbol
+            if (/[^A-Za-z0-9]/.test(password)) {
+                validationItems.symbol.classList.add('valid');
+            } else {
+                validationItems.symbol.classList.remove('valid');
+            }
+            
+            // Enable signup button if all validations pass
+            const allValid = [...document.querySelectorAll('.validation-list li')].every(li => li.classList.contains('valid'));
+            signupBtn.disabled = !allValid;
+        }
+
+      
     // Password match validation
     confirmPasswordInput.addEventListener('input', function() {
       if (passwordInput.value !== confirmPasswordInput.value) {
