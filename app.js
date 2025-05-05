@@ -59,6 +59,11 @@ mongoose.connect('mongodb://localhost:27017/authSystem', {
 
 // Define User Schema
 const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
   username: {
     type: String,
     required: true,
@@ -91,7 +96,7 @@ const JWT_SECRET = 'your_jwt_secret_key'; // In production, use environment vari
 // Register new user
 app.post('/api/register', async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, username, email, password } = req.body;
     
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
@@ -107,6 +112,7 @@ app.post('/api/register', async (req, res) => {
     
     // Create new user
     const newUser = new User({
+      name,
       username,
       email,
       password: hashedPassword
@@ -126,6 +132,7 @@ app.post('/api/register', async (req, res) => {
       token,
       user: {
         id: newUser._id,
+        name: newUser.name,
         username: newUser.username,
         email: newUser.email
       }
@@ -165,6 +172,7 @@ app.post('/api/login', async (req, res) => {
       token,
       user: {
         id: user._id,
+        name: user.name,
         username: user.username,
         email: user.email
       }

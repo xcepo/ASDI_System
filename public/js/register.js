@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('register-form');
     const alertContainer = document.getElementById('alert-container');
-    // const passwordInput = document.getElementById('password');
+    const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirm-password');
     
     // Check if user is already logged in
@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
     // Password validation
-    const passwordInput = document.getElementById('password');
     const validationItems = {
         length: document.getElementById('length-validation'),
         lowercase: document.getElementById('lowercase-validation'),
@@ -83,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       // Get form data
+      const name = document.getElementById('name').value.trim();
       const username = document.getElementById('username').value.trim();
       const email = document.getElementById('email').value.trim();
       const password = passwordInput.value;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const termsAccepted = document.getElementById('terms').checked;
       
       // Validation
-      if (!username || !email || !password || !confirmPassword) {
+      if (!name || !username || !email || !password || !confirmPassword) {
         showAlert('Please fill in all fields', 'danger');
         return;
       }
@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ username, email, password })
+          body: JSON.stringify({ name, username, email, password })
         });
         
         const data = await response.json();

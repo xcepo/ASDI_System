@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logout-btn');
     const userNameElement = document.getElementById('user-name');
+    const profileName = document.getElementById('profile-name');
     const profileUsername = document.getElementById('profile-username');
     const profileEmail = document.getElementById('profile-email');
     const profileCreated = document.getElementById('profile-created');
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || '{}');
     if (user.username) {
       userNameElement.textContent = user.username;
+      profileName.textContent = user.name;
       profileUsername.textContent = user.username;
       profileEmail.textContent = user.email || 'Not available';
       
@@ -61,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const userData = await response.json();
         
         // Update UI with user data
+        profileName.textContent = user.name;
         profileUsername.textContent = userData.username;
         profileEmail.textContent = userData.email;
         
