@@ -49,6 +49,27 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
+// Recipe Manager Routes
+app.get('/recipes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'recipes.html'));
+});
+
+app.get('/recipes/add', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'add-recipe.html'));
+});
+
+app.get('/recipes/edit/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'edit-recipe.html'));
+});
+
+app.get('/recipes/view/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'view-recipe.html'));
+});
+
+app.get('/admin/recipes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin-recipes.html'));
+});
+
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/authSystem', {
   useNewUrlParser: true,
@@ -80,6 +101,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Recipe'
+  }],
   createdAt: {
     type: Date,
     default: Date.now
@@ -110,19 +140,20 @@ app.post('/api/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    // Create new user
+    // Create new user with default user role
     const newUser = new User({
       name,
       username,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role: 'user' // Default role
     });
     
     await newUser.save();
     
     // Create JWT token
     const token = jwt.sign(
-      { id: newUser._id, username: newUser.username },
+      { id: newUser._id, username: newUser.username, role: newUser.role },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -134,7 +165,8 @@ app.post('/api/register', async (req, res) => {
         id: newUser._id,
         name: newUser.name,
         username: newUser.username,
-        email: newUser.email
+        email: newUser.email,
+        role: newUser.role
       }
     });
   } catch (error) {
@@ -160,9 +192,9 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     
-    // Create JWT token
+    // Create JWT token with role
     const token = jwt.sign(
-      { id: user._id, username: user.username },
+      { id: user._id, username: user.username, role: user.role },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -174,7 +206,8 @@ app.post('/api/login', async (req, res) => {
         id: user._id,
         name: user.name,
         username: user.username,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
   } catch (error) {
@@ -193,6 +226,12 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+// Import route modules
+const recipeRoutes = require('./routes/recipeRoutes');
+
+// Use API routes
+app.use('/api/recipes', recipeRoutes);
 
 // Middleware to verify JWT token
 function authenticateToken(req, res, next) {
